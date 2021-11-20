@@ -115,11 +115,11 @@ function obtenerSucursales(req, res) {
 
 function GenerarPdf(req, res) {
     var params = req.body;
-  
-  
 
-  
-    if (params.nombre === req.user.nombre) {
+    if(req.user.rol != 'ROL_ADMIN'){
+        return res.status(500).send({mensaje: 'No posee los permisos para generar el PDF'});
+      }
+    if (params.sucursalEmpresa === req.user.nombre) {
   
       Sucursal.find({ sucursalEmpresa: req.user.sub }).exec((err, sucursalEncontrado) => {
         if (err) return res.status(500).send({ mensaje: 'Error en la peticion de obtener Datos' })
@@ -142,8 +142,6 @@ function GenerarPdf(req, res) {
       return res.status(500).send({ mensaje: 'El PDF se ha generado exitosamente' })
   
   
-    } else {
-      return res.status(500).send({ mensaje: 'No puede generar un pdf de Otra Empresa' })
     }
   
   
