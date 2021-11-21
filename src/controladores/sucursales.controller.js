@@ -100,6 +100,22 @@ function eliminarSucursal(req, res) {
   
   
 }
+function obtenerSucursalesID(req, res){
+
+    var sucursalId = req.params.idSucursal;
+  
+    if(req.user.rol != 'ROL_ADMIN'){
+      return res.status(500).send({mensaje: 'Solo el rol tipo admin puede obtener po ID las sucursales'});
+    }
+  
+    Sucursal.findById(sucursalId,(err, sucursalEncontrada)=>{
+      if (err) return res.status(500).send({mensaje: 'Error  en la peticion'})
+  
+      if(!sucursalEncontrada) return res.status(500).send({mensaje: 'Error al obtener los datos de la sucursal'})
+  
+      return res.status(200).send({ sucursalEncontrada })
+    })
+  }
 
 function obtenerSucursales(req, res) {
     if (req.user.rol != 'ROL_ADMIN') {
@@ -153,5 +169,6 @@ module.exports = {
     EditarSucursal,
     eliminarSucursal,
     GenerarPdf,
+    obtenerSucursalesID,
     obtenerSucursales
 }
